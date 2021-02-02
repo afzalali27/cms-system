@@ -12,7 +12,10 @@ class PostController extends Controller
 
     public function index(){
         
-        $posts = Post::all();
+        // $posts = Post::all();
+        $posts = auth()->user()->posts;
+
+        // dd($posts);
 
         return view('admin.posts.index', ['posts'=>$posts]);
     }
@@ -68,6 +71,7 @@ class PostController extends Controller
         $post->title = $inputs['title'];
         $post->body = $inputs['body'];
 
+        // we can also use update  here
         auth()->user()->posts()->save($post);
         Session::flash('post-updated','Post has updated Successfuly');
 
