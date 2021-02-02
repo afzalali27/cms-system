@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Session;
 class PostController extends Controller
 {
     //
@@ -43,8 +43,40 @@ class PostController extends Controller
         }
 
         auth()->user()->posts()->create($inputs);
+        Session::flash('post-created','Post has created Successfuly');
 
         // dd(request('image'));  // show data of image
+        return redirect()->route('posts.index');
+    }
+
+    public function edit(Post $post){
+        return view('admin.posts.edit',['post'=>$post]);
+    }
+    public function update(Post $post){
+        $inputs = request()->validate([
+            // define rules here for validations
+            'title'=>'required|min:8|max:255',
+            'post_image'=>'file', // for diff formats
+            'body'=>'required'
+            // 'image'=>'mimes:jpeg,png,', // for diff formats
+        ]);
+
+        if(request('post_image')){
+            $inputs['post_image'] = request('post_image')->store('images');
+            $post->post_image = $inputs['post_image'];
+        }
+        $post->title = $inputs['title'];
+        $post->body = $inputs['body'];
+
+        auth()->user()->posts()->save($post);
+        Session::flash('post-updated','Post has updated Successfuly');
+
+        // dd(request('image'));  // show data of image
+        return redirect()->route('posts.index');
+    }
+    public function destroy(Post $post){
+        $post->delete();
+        Session::flash('message','Post Deleted Successfuly');
         return back();
     }
 }
