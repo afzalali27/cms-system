@@ -45,17 +45,23 @@
                                     <td>{{ $post->user->name }}</td>
                                     <td><a href="{{ route('posts.edit', $post->id) }}"> {{ $post->title }}</a></td>
                                     <td>
-                                        <img src="{{ $post->post_image }}" width="100%" height="auto" alt="no image" />
+                                        <img src="{{ $post->post_image }}" height="100px" alt="no image" />
                                     </td>
                                     <td>{{ $post->created_at->diffForHumans() }}</td>
                                     <td>{{ $post->updated_at->diffForHumans() }}</td>
                                     <td>
-                                        <form action="{{ route('posts.destroy', $post->id) }}" method="post"
-                                            enctype="multipart/form-data">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form>
+                                        {{-- only show delete option if user is able to delete by checking view policy --}}
+
+                                        @can('view', $post)
+
+
+                                            <form action="{{ route('posts.destroy', $post->id) }}" method="post"
+                                                enctype="multipart/form-data">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach
@@ -63,6 +69,12 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+        <div class="d-flex">
+            <div class="mx-auto">
+                {{ $posts->links() }}
+
             </div>
         </div>
     @endsection
@@ -73,6 +85,6 @@
         <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
         <!-- Page level custom scripts -->
-        <script src="{{ asset('js/demo/datatables-demo.js') }}"></script>
+        {{-- <script src="{{ asset('js/demo/datatables-demo.js') }}"></script> --}}
     @endsection
 </x-admin-master>
