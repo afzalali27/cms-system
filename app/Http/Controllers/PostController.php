@@ -12,8 +12,8 @@ class PostController extends Controller
 
     public function index(){
         
-        // $posts = Post::all();
-        $posts = auth()->user()->posts;
+        $posts = Post::all();
+        // $posts = auth()->user()->posts;
 
         // dd($posts);
 
@@ -70,7 +70,7 @@ class PostController extends Controller
         }
         $post->title = $inputs['title'];
         $post->body = $inputs['body'];
-
+        $this->authorize('update',$post); // pass the policy to update post
         // we can also use update  here
         auth()->user()->posts()->save($post);
         Session::flash('post-updated','Post has updated Successfuly');
@@ -78,8 +78,22 @@ class PostController extends Controller
         // dd(request('image'));  // show data of image
         return redirect()->route('posts.index');
     }
+
+    // delete
     public function destroy(Post $post){
-        $post->delete();
+
+        // delete only if it belongs to user
+        $this->authorize('delete',$post);
+        // or we can use can function
+        // if(auth()->user()->can('view',$post)) then delete
+        
+        $post->delete(); // it will destroy any post comes to it , don't care
+        // if it belongs to logged in user or not so we must need to authenticate user
+        // one method is to check user id with post id like below
+        // if(auth()->user()->id == $post->user_id) then delete otherwise do nothing
+
+        // ohter than this we can add middleware and add policies to do this task
+
         Session::flash('message','Post Deleted Successfuly');
         return back();
     }

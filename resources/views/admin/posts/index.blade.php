@@ -50,12 +50,18 @@
                                     <td>{{ $post->created_at->diffForHumans() }}</td>
                                     <td>{{ $post->updated_at->diffForHumans() }}</td>
                                     <td>
-                                        <form action="{{ route('posts.destroy', $post->id) }}" method="post"
-                                            enctype="multipart/form-data">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form>
+                                        {{-- only show delete option if user is able to delete by checking view policy --}}
+
+                                        @can('view', $post)
+
+
+                                            <form action="{{ route('posts.destroy', $post->id) }}" method="post"
+                                                enctype="multipart/form-data">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach
