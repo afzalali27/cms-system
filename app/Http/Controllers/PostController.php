@@ -47,4 +47,8 @@ class PostController extends Controller
         // dd(request('image'));  // show data of image
         return back();
     }
+
+    public function destroy(Post $post){
+        $post->delete();
+    }
 }

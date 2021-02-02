@@ -18,6 +18,7 @@
                                 <th>Image</th>
                                 <th>Creation Date</th>
                                 <th>Updated At</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tfoot>
@@ -28,6 +29,7 @@
                                 <th>Image</th>
                                 <th>Creation Date</th>
                                 <th>Updated At</th>
+                                <th>Actions</th>
                             </tr>
                         </tfoot>
                         <tbody>
@@ -37,10 +39,18 @@
                                     <td>{{ $post->user->name }}</td>
                                     <td>{{ $post->title }}</td>
                                     <td>
-                                        <img src="{{ $post->post_image }}" height="40px" alt="no image" />
+                                        <img src="{{ $post->post_image }}" width="100%" height="auto" alt="no image" />
                                     </td>
                                     <td>{{ $post->created_at->diffForHumans() }}</td>
                                     <td>{{ $post->updated_at->diffForHumans() }}</td>
+                                    <td>
+                                        <form action="{{ route('posts.destroy', $post->id) }}" method="post"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </td>
                                 </tr>
                             @endforeach
 
