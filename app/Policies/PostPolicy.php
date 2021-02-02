@@ -43,6 +43,7 @@ class PostPolicy
     public function create(User $user)
     {
         //
+        return $user->is($user);
     }
 
     /**
