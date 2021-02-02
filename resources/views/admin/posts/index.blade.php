@@ -5,6 +5,8 @@
             <div class="alert alert-danger">{{ Session::get('message') }}</div>
         @elseif(Session::has('post-created'))
             <div class="alert alert-success">{{ Session::get('post-created') }}</div>
+        @elseif(Session::has('post-updated'))
+            <div class="alert alert-success">{{ Session::get('post-updated') }}</div>
         @endif
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
@@ -41,7 +43,7 @@
                                 <tr>
                                     <td>{{ $post->id }}</td>
                                     <td>{{ $post->user->name }}</td>
-                                    <td>{{ $post->title }}</td>
+                                    <td><a href="{{ route('posts.edit', $post->id) }}"> {{ $post->title }}</a></td>
                                     <td>
                                         <img src="{{ $post->post_image }}" width="100%" height="auto" alt="no image" />
                                     </td>
