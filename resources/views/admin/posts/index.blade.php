@@ -1,7 +1,11 @@
 <x-admin-master>
     @section('content')
         <h1>All posts</h1>
-
+        @if (Session::has('message'))
+            <div class="alert alert-danger">{{ Session::get('message') }}</div>
+        @elseif(Session::has('post-created'))
+            <div class="alert alert-success">{{ Session::get('post-created') }}</div>
+        @endif
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">

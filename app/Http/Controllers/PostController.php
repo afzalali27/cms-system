@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Session;
 class PostController extends Controller
 {
     //
@@ -43,12 +43,15 @@ class PostController extends Controller
         }
 
         auth()->user()->posts()->create($inputs);
+        Session::flash('post-created','Post has created Successfuly');
 
         // dd(request('image'));  // show data of image
-        return back();
+        return redirect()->route('posts.index');
     }
 
     public function destroy(Post $post){
         $post->delete();
+        Session::flash('message','Post Deleted Successfuly');
+        return back();
     }
 }
